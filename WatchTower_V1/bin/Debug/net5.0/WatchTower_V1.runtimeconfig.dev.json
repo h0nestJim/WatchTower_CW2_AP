@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\jshau\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\jshau\\.nuget\\packages"
+    ]
+  }
+}
