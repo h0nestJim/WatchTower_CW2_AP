@@ -55,6 +55,10 @@ namespace WatchTower_V1.Areas.Identity.Pages.Account
             public string SName { get; set; }
 
             [Required]
+            [Display(Name = "Username")]
+            public string UserName { get; set; }
+
+            [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
@@ -83,7 +87,7 @@ namespace WatchTower_V1.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new UserModel { UserName = Input.Fname, Email = Input.Email, Fname = Input.Fname, SName=Input.SName };
+                var user = new UserModel { UserName = Input.UserName, Email = Input.Email, Fname = Input.Fname, SName=Input.SName };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
