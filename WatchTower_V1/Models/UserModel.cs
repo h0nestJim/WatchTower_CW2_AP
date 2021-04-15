@@ -15,6 +15,8 @@ namespace WatchTower_V1.Models
         [Required]
         public string SName { get; set; }
 
+        public byte[] ProfilePicture { get; set; }
+
 
     }
 }

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+
 using WatchTower_V1.Models;
 
 namespace WatchTower_V1.Areas.Identity.Pages.Account
@@ -22,12 +23,16 @@ namespace WatchTower_V1.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<UserModel> _signInManager;
         private readonly UserManager<UserModel> _userManager;
+
+        //inject role manager
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
             UserManager<UserModel> userManager,
             SignInManager<UserModel> signInManager,
+            RoleManager<IdentityRole> roleManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
@@ -35,6 +40,7 @@ namespace WatchTower_V1.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         [BindProperty]
@@ -89,10 +95,22 @@ namespace WatchTower_V1.Areas.Identity.Pages.Account
             {
                 var user = new UserModel { UserName = Input.UserName, Email = Input.Email, Fname = Input.Fname, SName=Input.SName };
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
+                //ADD Custom Roles
+                //bool roleExists = await _roleManager.RoleExistsAsync("StaffStudent");
+
+                //if (!roleExists)
+                //{
+                //    await _roleManager.CreateAsync(new IdentityRole("StaffStudent"));
+                //}
+                //Save Role
+                //var roleResult = await _userManager.AddToRoleAsync(user, "StaffStudent");
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-
+                    //might not work
+                    await _userManager.AddToRoleAsync(user, Data.Roles.User.ToString());
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
