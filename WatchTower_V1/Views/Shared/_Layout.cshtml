@@ -24,6 +24,26 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Dropdown
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" asp-area="" asp-controller="Campus" asp-action="Index">Campus</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Room" asp-action="Index">Room</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="AssetCategory" asp-action="Index">Asset Categories</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Item" asp-action="Index">Manage Assets</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="RoleManager" asp-action="Index">Role Manager</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="UserRoles" asp-action="Index">User Roles</a>
+
+                            </div>
+                        </li>
+
+
+
+
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

@@ -10,26 +10,22 @@ using WatchTower_V1.Models;
 
 namespace WatchTower_V1.Views
 {
-    public class RoomController : Controller
+    public class AssetCategoryController : Controller
     {
         private readonly ApplicationDbContext _context;
-        
 
-        public RoomController(ApplicationDbContext context)
+        public AssetCategoryController(ApplicationDbContext context)
         {
             _context = context;
-            
         }
 
-        // GET: Room
+        // GET: AssetCategory
         public async Task<IActionResult> Index()
         {
-            
-  
-            return View(await _context.Room.ToListAsync());
+            return View(await _context.AssetCategory.ToListAsync());
         }
 
-        // GET: Room/Details/5
+        // GET: AssetCategory/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,65 +33,39 @@ namespace WatchTower_V1.Views
                 return NotFound();
             }
 
-            var roomModel = await _context.Room
+            var assetCategoryModel = await _context.AssetCategory
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (roomModel == null)
+            if (assetCategoryModel == null)
             {
                 return NotFound();
             }
 
-            return View(roomModel);
+            return View(assetCategoryModel);
         }
 
-        // GET: Room/Create
-        public async Task<IActionResult> Create()
+        // GET: AssetCategory/Create
+        public IActionResult Create()
         {
-
-            Console.WriteLine("Hello!");
-            var campusRoomsViewModel = new CampusRoomsViewModel();
-           
-            campusRoomsViewModel.Campus = await _context.Campus.ToListAsync<CampusModel>();
-/*
-              var users = await _userManager.Users.ToListAsync();
-            var userRolesViewModel = new List<UserRolesViewModel>();
-            foreach (UserModel user in users)
-            {
-                var thisViewModel = new UserRolesViewModel();
-                thisViewModel.UserId = user.Id;
-                thisViewModel.Email = user.Email;
-                thisViewModel.FirstName = user.Fname;
-                thisViewModel.LastName = user.SName;
-                thisViewModel.Roles = await GetUserRoles(user);
-                userRolesViewModel.Add(thisViewModel);
-            }
-            return View(userRolesViewModel);
-            */
-
-            return View(campusRoomsViewModel);
+            return View();
         }
 
-        // POST: Room/Create
+        // POST: AssetCategory/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,RoomNumber,Description,CampusId")] RoomModel roomModel)
+        public async Task<IActionResult> Create([Bind("Id,Category")] AssetCategoryModel assetCategoryModel)
         {
-
             if (ModelState.IsValid)
             {
-                _context.Add(roomModel);
+                _context.Add(assetCategoryModel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(roomModel);
+            return View(assetCategoryModel);
         }
-        
 
-        
-
-        // GET: Room/Edit/5
+        // GET: AssetCategory/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -103,22 +73,22 @@ namespace WatchTower_V1.Views
                 return NotFound();
             }
 
-            var roomModel = await _context.Room.FindAsync(id);
-            if (roomModel == null)
+            var assetCategoryModel = await _context.AssetCategory.FindAsync(id);
+            if (assetCategoryModel == null)
             {
                 return NotFound();
             }
-            return View(roomModel);
+            return View(assetCategoryModel);
         }
 
-        // POST: Room/Edit/5
+        // POST: AssetCategory/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,RoomNumber,Description")] RoomModel roomModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Category")] AssetCategoryModel assetCategoryModel)
         {
-            if (id != roomModel.Id)
+            if (id != assetCategoryModel.Id)
             {
                 return NotFound();
             }
@@ -127,12 +97,12 @@ namespace WatchTower_V1.Views
             {
                 try
                 {
-                    _context.Update(roomModel);
+                    _context.Update(assetCategoryModel);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RoomModelExists(roomModel.Id))
+                    if (!AssetCategoryModelExists(assetCategoryModel.Id))
                     {
                         return NotFound();
                     }
@@ -143,10 +113,10 @@ namespace WatchTower_V1.Views
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(roomModel);
+            return View(assetCategoryModel);
         }
 
-        // GET: Room/Delete/5
+        // GET: AssetCategory/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -154,30 +124,30 @@ namespace WatchTower_V1.Views
                 return NotFound();
             }
 
-            var roomModel = await _context.Room
+            var assetCategoryModel = await _context.AssetCategory
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (roomModel == null)
+            if (assetCategoryModel == null)
             {
                 return NotFound();
             }
 
-            return View(roomModel);
+            return View(assetCategoryModel);
         }
 
-        // POST: Room/Delete/5
+        // POST: AssetCategory/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var roomModel = await _context.Room.FindAsync(id);
-            _context.Room.Remove(roomModel);
+            var assetCategoryModel = await _context.AssetCategory.FindAsync(id);
+            _context.AssetCategory.Remove(assetCategoryModel);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool RoomModelExists(int id)
+        private bool AssetCategoryModelExists(int id)
         {
-            return _context.Room.Any(e => e.Id == id);
+            return _context.AssetCategory.Any(e => e.Id == id);
         }
     }
 }

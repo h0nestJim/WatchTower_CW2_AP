@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WatchTower_V1.Data;
 
-namespace WatchTower_V1.Data.Migrations
+namespace WatchTower_V1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210415213752_AddRooms")]
-    partial class AddRooms
+    [Migration("20210419211620_newversion")]
+    partial class newversion
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -156,12 +156,77 @@ namespace WatchTower_V1.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("WatchTower_V1.Models.RoomModel", b =>
+            modelBuilder.Entity("WatchTower_V1.Models.AssetCategoryModel", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AssetCategory");
+                });
+
+            modelBuilder.Entity("WatchTower_V1.Models.CampusModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Campus");
+                });
+
+            modelBuilder.Entity("WatchTower_V1.Models.ItemModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AssetCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoomId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetCategoryId");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("Item");
+                });
+
+            modelBuilder.Entity("WatchTower_V1.Models.RoomModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CampusId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -171,10 +236,9 @@ namespace WatchTower_V1.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("campus")
-                        .HasColumnType("int");
+                    b.HasKey("Id");
 
-                    b.HasKey("id");
+                    b.HasIndex("CampusId");
 
                     b.ToTable("Room");
                 });
@@ -304,6 +368,36 @@ namespace WatchTower_V1.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WatchTower_V1.Models.ItemModel", b =>
+                {
+                    b.HasOne("WatchTower_V1.Models.AssetCategoryModel", "AssetCategory")
+                        .WithMany()
+                        .HasForeignKey("AssetCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WatchTower_V1.Models.RoomModel", "Room")
+                        .WithMany()
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AssetCategory");
+
+                    b.Navigation("Room");
+                });
+
+            modelBuilder.Entity("WatchTower_V1.Models.RoomModel", b =>
+                {
+                    b.HasOne("WatchTower_V1.Models.CampusModel", "Campus")
+                        .WithMany()
+                        .HasForeignKey("CampusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Campus");
                 });
 #pragma warning restore 612, 618
         }

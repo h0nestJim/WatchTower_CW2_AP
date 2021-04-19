@@ -11,6 +11,11 @@ namespace WatchTower_V1.Data
     {
         public DbSet<RoomModel> Room { get; set; }
         public DbSet<CampusModel> Campus { get; set; }
+
+        public DbSet<AssetCategoryModel> AssetCategory { get; set; }
+        public DbSet<ItemModel> Item { get; set; }
+
+       
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

@@ -9,7 +9,7 @@ namespace WatchTower_V1.Models
     public class RoomModel
     {
         [Key]
-        public int id { get; set;}
+        public int Id { get; set;}
 
         [Required]
         public string RoomNumber { get; set; }
