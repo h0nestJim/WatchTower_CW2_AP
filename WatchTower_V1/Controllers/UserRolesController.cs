@@ -37,6 +37,7 @@ namespace WatchTower_V1.Controllers
         private async Task<List<string>> GetUserRoles(UserModel user)
         {
             return new List<string>(await _userManager.GetRolesAsync(user));
+            
         }
 
 
