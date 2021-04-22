@@ -10,8 +10,8 @@ using WatchTower_V1.Data;
 namespace WatchTower_V1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210419211620_newversion")]
-    partial class newversion
+    [Migration("20210422220532_new")]
+    partial class @new
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -188,6 +188,45 @@ namespace WatchTower_V1.Migrations
                     b.ToTable("Campus");
                 });
 
+            modelBuilder.Entity("WatchTower_V1.Models.GeneralTicketModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateOpened")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StaffId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isOpen")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("GeneralTickets");
+                });
+
             modelBuilder.Entity("WatchTower_V1.Models.ItemModel", b =>
                 {
                     b.Property<int>("Id")
@@ -241,6 +280,52 @@ namespace WatchTower_V1.Migrations
                     b.HasIndex("CampusId");
 
                     b.ToTable("Room");
+                });
+
+            modelBuilder.Entity("WatchTower_V1.Models.TechnicalTicketModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("AssetsId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateOpened")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StaffId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("StaffStudentId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TimeOpened")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetsId");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("TechnicalTicket");
                 });
 
             modelBuilder.Entity("WatchTower_V1.Models.UserModel", b =>
@@ -370,6 +455,15 @@ namespace WatchTower_V1.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WatchTower_V1.Models.GeneralTicketModel", b =>
+                {
+                    b.HasOne("WatchTower_V1.Models.UserModel", "Staff")
+                        .WithMany()
+                        .HasForeignKey("StaffId");
+
+                    b.Navigation("Staff");
+                });
+
             modelBuilder.Entity("WatchTower_V1.Models.ItemModel", b =>
                 {
                     b.HasOne("WatchTower_V1.Models.AssetCategoryModel", "AssetCategory")
@@ -398,6 +492,21 @@ namespace WatchTower_V1.Migrations
                         .IsRequired();
 
                     b.Navigation("Campus");
+                });
+
+            modelBuilder.Entity("WatchTower_V1.Models.TechnicalTicketModel", b =>
+                {
+                    b.HasOne("WatchTower_V1.Models.ItemModel", "Assets")
+                        .WithMany()
+                        .HasForeignKey("AssetsId");
+
+                    b.HasOne("WatchTower_V1.Models.UserModel", "Staff")
+                        .WithMany()
+                        .HasForeignKey("StaffId");
+
+                    b.Navigation("Assets");
+
+                    b.Navigation("Staff");
                 });
 #pragma warning restore 612, 618
         }

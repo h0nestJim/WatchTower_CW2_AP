@@ -46,11 +46,15 @@ namespace WatchTower_V1.Views
         // GET: Item/Create
         public async Task<IActionResult> Create()
         {
+           
             var assetAssetCategoriesViewModel = new AssetAssetCategoriesViewModel();
 
             assetAssetCategoriesViewModel.Categories = await _context.AssetCategory.ToListAsync();
             assetAssetCategoriesViewModel.Rooms = await _context.Room.ToListAsync();
             return View(assetAssetCategoriesViewModel);
+           
+
+
         }
 
         // POST: Item/Create

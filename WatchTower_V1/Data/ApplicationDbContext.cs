@@ -15,7 +15,10 @@ namespace WatchTower_V1.Data
         public DbSet<AssetCategoryModel> AssetCategory { get; set; }
         public DbSet<ItemModel> Item { get; set; }
 
-       
+        public DbSet<GeneralTicketModel> GeneralTickets { get; set; }
+
+        public DbSet<TechnicalTicketModel> TechnicalTicket { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

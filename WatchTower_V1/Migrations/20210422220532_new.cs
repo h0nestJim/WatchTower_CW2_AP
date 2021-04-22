@@ -2,7 +2,7 @@
 
 namespace WatchTower_V1.Migrations
 {
-    public partial class newversion : Migration
+    public partial class @new : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

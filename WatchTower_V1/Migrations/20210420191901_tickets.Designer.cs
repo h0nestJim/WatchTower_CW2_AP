@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WatchTower_V1.Data;
 
 namespace WatchTower_V1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210420191901_tickets")]
+    partial class tickets
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -200,26 +202,34 @@ namespace WatchTower_V1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StaffId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("StaffStudentId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TimeOpened")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("isClosed")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("StaffId");
 
                     b.ToTable("GeneralTickets");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("GeneralTicketModel");
                 });
 
             modelBuilder.Entity("WatchTower_V1.Models.ItemModel", b =>
@@ -275,52 +285,6 @@ namespace WatchTower_V1.Migrations
                     b.HasIndex("CampusId");
 
                     b.ToTable("Room");
-                });
-
-            modelBuilder.Entity("WatchTower_V1.Models.TechnicalTicketModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("AssetsId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateOpened")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StaffId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("StaffStudentId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("TimeOpened")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssetsId");
-
-                    b.HasIndex("StaffId");
-
-                    b.ToTable("TechnicalTicket");
                 });
 
             modelBuilder.Entity("WatchTower_V1.Models.UserModel", b =>
@@ -399,6 +363,21 @@ namespace WatchTower_V1.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("WatchTower_V1.Models.TechnicalTicketModel", b =>
+                {
+                    b.HasBaseType("WatchTower_V1.Models.GeneralTicketModel");
+
+                    b.Property<int?>("AssetsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("AssetsId");
+
+                    b.HasDiscriminator().HasValue("TechnicalTicketModel");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -452,13 +431,11 @@ namespace WatchTower_V1.Migrations
 
             modelBuilder.Entity("WatchTower_V1.Models.GeneralTicketModel", b =>
                 {
-                    b.HasOne("WatchTower_V1.Models.UserModel", "User")
+                    b.HasOne("WatchTower_V1.Models.UserModel", "Staff")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StaffId");
 
-                    b.Navigation("User");
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("WatchTower_V1.Models.ItemModel", b =>
@@ -497,13 +474,7 @@ namespace WatchTower_V1.Migrations
                         .WithMany()
                         .HasForeignKey("AssetsId");
 
-                    b.HasOne("WatchTower_V1.Models.UserModel", "Staff")
-                        .WithMany()
-                        .HasForeignKey("StaffId");
-
                     b.Navigation("Assets");
-
-                    b.Navigation("Staff");
                 });
 #pragma warning restore 612, 618
         }
