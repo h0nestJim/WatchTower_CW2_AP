@@ -1,5 +1,6 @@
 ﻿@model WatchTower_V1.Models.GeneralTicketModel
 
+
 @{
     ViewData["Title"] = "Edit";
 }
@@ -28,9 +29,13 @@
                 <input asp-for="DateOpened" class="form-control" />
                 <span asp-validation-for="DateOpened" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="isClosed" /> @Html.DisplayNameFor(model => model.isClosed)
+            <div class="form-group">
+                <label asp-for="isClosed">Ticket Status:
+                    <select asp-for="isClosed">
+                        <option value="false">Keep Ticket Open</option>
+                        <option value="true">Close Ticket</option>
+                        
+                    </select>
                 </label>
             </div>
             <div class="form-group">

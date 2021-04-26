@@ -17,6 +17,8 @@ namespace WatchTower_V1.Data
 
         public DbSet<GeneralTicketModel> GeneralTickets { get; set; }
 
+        public DbSet<GeneralUpdateModel> GeneralUpdates { get; set; }
+
         public DbSet<TechnicalTicketModel> TechnicalTicket { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)

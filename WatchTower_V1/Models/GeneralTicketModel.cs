@@ -32,9 +32,13 @@ namespace WatchTower_V1.Models
    
         public virtual UserModel User {get;set; }
 
-      
 
-      
+        public List<GeneralUpdateModel> Updates;
 
+        public GeneralTicketModel()
+        {
+            Updates = new List<GeneralUpdateModel>();
+           
+        }
     }
 }

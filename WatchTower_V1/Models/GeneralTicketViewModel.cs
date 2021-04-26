@@ -26,7 +26,8 @@ namespace WatchTower_V1.Models
         public string UserName { get; set; }
 
         [Required]
-        public bool isOpen { get; set; }
+        public bool isClosed { get; set; }
+
 
         [ForeignKey("UserId")]
         public string UserId{ get; set; }

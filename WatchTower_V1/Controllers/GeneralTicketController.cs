@@ -37,19 +37,62 @@ namespace WatchTower_V1.Views
 
             var generalTicketModel = await _context.GeneralTickets
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+
             if (generalTicketModel == null)
             {
                 return NotFound();
             }
 
+            generalTicketModel.Updates = await _context.GeneralUpdates.Where(ticket => ticket.TicketId == id).ToListAsync();
+
             return View(generalTicketModel);
         }
 
-       
+    
+
+        [ActionName("Action")]
+        public async Task<IActionResult> Update(int? id, string action)
+        {
+           
+            var generalTicketModel = await _context.GeneralTickets
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (generalTicketModel == null)
+            {
+                return NotFound();
+            }
+
+           
+
+            GeneralUpdateModel update = new GeneralUpdateModel();
+            update.TimeStamp = DateTime.Now;
+            update.UserName = User.Identity.Name;
+            update.IsResolved = false;
+            update.Action = action;
+            update.TicketId = generalTicketModel.Id;
+            //change later
+            update.ProfilePicture = "/images/sampleprofile.png";
+
+           
+
+           
+
+            _context.Update(update);
+            await _context.SaveChangesAsync();
+
+            _context.Update(generalTicketModel);
+
+            await _context.SaveChangesAsync();
+
+            generalTicketModel.Updates.Add(update);
+
+            return RedirectToAction(nameof(Details), new { id = id });
 
 
-        // GET: GeneralTicket/Create
-        [Authorize]
+        }
+
+
+
         public async Task<IActionResult> Create()
         {
              var generalTicketViewModel = new GeneralTicketViewModel();
@@ -88,7 +131,7 @@ namespace WatchTower_V1.Views
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,DateOpened,isOpen,UserName,UserId")] GeneralTicketModel generalTicketModel)
+        public async Task<IActionResult> Create([Bind("Id,Title,Description,DateOpened,isClosed,UserName,UserId")] GeneralTicketModel generalTicketModel)
         {
             if (ModelState.IsValid)
             {
@@ -120,8 +163,9 @@ namespace WatchTower_V1.Views
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,DateOpened,isOpen,UserName,UserId")] GeneralTicketModel generalTicketModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,DateOpened,isClosed,UserName,UserId")] GeneralTicketModel generalTicketModel)
         {
+            var test = generalTicketModel.isClosed;
             if (id != generalTicketModel.Id)
             {
                 return NotFound();

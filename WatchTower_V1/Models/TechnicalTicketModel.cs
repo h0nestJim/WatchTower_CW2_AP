@@ -22,21 +22,25 @@ namespace WatchTower_V1.Models
         public DateTime DateOpened { get; set; }
 
         [Required]
-        public DateTime TimeOpened { get; set; }
-
+        public bool isClosed { get; set; }
+        
         //staff member generating the ticket
+        [Required]
+      
+        public string UserName { get; set; }
+
+        //person raising the issue
         [Required]
         public string UserId { get; set; }
 
-        public virtual UserModel Staff { get; set; }
+        public virtual UserModel User { get; set; }
 
-        //staff or student that raised the ticket
-        public string StaffStudentId { get; set; }
+
 
         [Required]
-        public int ItemId { get; set; }
+        public int AssetId { get; set; }
 
-        public virtual ItemModel Assets { get; set; }
+        public virtual ItemModel Asset { get; set; }
 
     }
 }

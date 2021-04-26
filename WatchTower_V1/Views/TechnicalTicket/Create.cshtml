@@ -1,0 +1,211 @@
+﻿@model TechnicalTicketViewModel
+
+
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+
+
+<script type="text/javascript">
+
+    function GetRooms() {
+        $.get("/TechnicalTicket/GetRooms",
+            {
+            CampusId: $("#SelectCampus").val()
+            },
+            function (data) {
+
+                $("#RoomId").empty();
+                $("#RoomId").append("<option value=''>Select Room...</option>");
+                
+                //loop through object array and populate dropdown list
+                $.each(data, function (index, obj) {
+                    console.log(obj.id);
+                    console.log(obj.roomNumber);
+                    $("#RoomId").append(`<option value='${obj.id}'>${obj.roomNumber}</option>`);
+                });
+
+                
+            }
+        );
+    }
+
+    function GetAssets() {
+        $.get("/TechnicalTicket/GetAssets",
+            {
+                RoomId: $("#RoomId").val()
+            },
+            function (data) {
+
+                $("#AssetId").empty();
+                $("#AssetId").append("<option value=''>Select Asset...</option>");
+                console.log(data)
+                //loop through object array and populate dropdown list
+                $.each(data, function (index, obj) {
+                    console.log(obj.id);
+                    console.log(obj.name);
+                    $("#AssetId").append(`<option value='${obj.id}'>${obj.name}</option>`);
+                });
+
+
+            }
+        );
+    }
+
+
+</script>
+
+<script type="text/javascript">
+
+    
+
+
+</script>
+
+
+<h1>Create</h1>
+
+<h4>TechnicalTicketModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOpened" class="control-label"></label>
+                <input asp-for="DateOpened" readonly class="form-control" />
+                <span asp-validation-for="DateOpened" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="isClosed">
+                    Ticket Status:
+                    <select asp-for="isClosed">
+                        <option value="false">Keep Ticket Open</option>
+                        <option value="true">Close Ticket</option>
+
+                    </select>
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <input readonly asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <select asp-for="UserId" class="form-control">
+
+                    @{
+                        foreach (var item in Model.DBUsers)
+                        {
+                            <option value="@item.Id">
+                                @item.UserName: @item.Fname @item.SName
+                            </option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+
+            @{/*
+@Html.DropDownListFor(m => m.CampusId, new SelectList(Model.Campus, "Id", "Name"), "Select Campus..")
+<button type="submit">Save</button>
+*/
+            }
+
+            <div class="form-group">
+                <label asp-for="CampusId" class="control-label"></label>
+                <select id="SelectCampus" asp-for="CampusId" class="form-control" onchange="GetRooms(this)">
+                    @{
+                        <option>Select Campus...</option>
+                        foreach (var item in Model.Campus)
+                        {
+
+                            <option value="@item.Id">
+                                @item.Name
+                            </option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="CampusId" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="RoomId" class="control-label"></label>
+                <select asp-for="RoomId" class="form-control" onchange="GetAssets(this)">
+                    <option>Select Room</option>
+                    @{if (Model.Room != null)
+                        {
+                            foreach (var item in Model.Room)
+                            {
+
+                                <option value="@item.Id">
+                                    @item.RoomNumber
+                                </option>
+                            }
+                        }
+                    }
+                </select>
+                <span asp-validation-for="RoomId" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="AssetId" class="control-label"></label>
+                <select asp-for="AssetId" class="form-control">
+                    <option>Select Asset</option>
+                    @{if (Model.Asset != null)
+                        {
+                            foreach (var item in Model.Asset)
+                            {
+
+                                <option value="@item.Id">
+                                    @item.Name
+                                </option>
+                            }
+                        }
+                    }
+                </select>
+                <span asp-validation-for="AssetId" class="text-danger"></span>
+            </div>
+
+
+
+            ***************************************************************
+
+
+
+
+
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+
+
+

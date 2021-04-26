@@ -222,6 +222,40 @@ namespace WatchTower_V1.Migrations
                     b.ToTable("GeneralTickets");
                 });
 
+            modelBuilder.Entity("WatchTower_V1.Models.GeneralUpdateModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsResolved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TicketId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("GeneralUpdates");
+                });
+
             modelBuilder.Entity("WatchTower_V1.Models.ItemModel", b =>
                 {
                     b.Property<int>("Id")
@@ -284,7 +318,7 @@ namespace WatchTower_V1.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AssetsId")
+                    b.Property<int>("AssetId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateOpened")
@@ -294,31 +328,26 @@ namespace WatchTower_V1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StaffId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("StaffStudentId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("TimeOpened")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isClosed")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssetsId");
+                    b.HasIndex("AssetId");
 
-                    b.HasIndex("StaffId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("TechnicalTicket");
                 });
@@ -461,6 +490,17 @@ namespace WatchTower_V1.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("WatchTower_V1.Models.GeneralUpdateModel", b =>
+                {
+                    b.HasOne("WatchTower_V1.Models.GeneralTicketModel", "Ticket")
+                        .WithMany()
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ticket");
+                });
+
             modelBuilder.Entity("WatchTower_V1.Models.ItemModel", b =>
                 {
                     b.HasOne("WatchTower_V1.Models.AssetCategoryModel", "AssetCategory")
@@ -493,17 +533,21 @@ namespace WatchTower_V1.Migrations
 
             modelBuilder.Entity("WatchTower_V1.Models.TechnicalTicketModel", b =>
                 {
-                    b.HasOne("WatchTower_V1.Models.ItemModel", "Assets")
+                    b.HasOne("WatchTower_V1.Models.ItemModel", "Asset")
                         .WithMany()
-                        .HasForeignKey("AssetsId");
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("WatchTower_V1.Models.UserModel", "Staff")
+                    b.HasOne("WatchTower_V1.Models.UserModel", "User")
                         .WithMany()
-                        .HasForeignKey("StaffId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Assets");
+                    b.Navigation("Asset");
 
-                    b.Navigation("Staff");
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }
