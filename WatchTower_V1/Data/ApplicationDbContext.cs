@@ -19,6 +19,7 @@ namespace WatchTower_V1.Data
 
         public DbSet<GeneralUpdateModel> GeneralUpdates { get; set; }
 
+        public DbSet<TechnicalUpdateModel> TechnicalUpdates { get; set; }
         public DbSet<TechnicalTicketModel> TechnicalTicket { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)

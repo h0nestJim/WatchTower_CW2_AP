@@ -42,5 +42,13 @@ namespace WatchTower_V1.Models
 
         public virtual ItemModel Asset { get; set; }
 
+
+        public List<TechnicalUpdateModel> Updates;
+
+        public TechnicalTicketModel()
+        {
+            Updates = new List<TechnicalUpdateModel>();
+
+        }
     }
 }

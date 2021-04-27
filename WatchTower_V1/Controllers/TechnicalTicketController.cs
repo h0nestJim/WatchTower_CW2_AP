@@ -35,16 +35,64 @@ namespace WatchTower_V1.Views
             }
 
             var technicalTicketModel = await _context.TechnicalTicket
-                .Include(t => t.Asset)
-                .Include(t => t.User)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+
+            if (technicalTicketModel == null)
+            {
+                return NotFound();
+            }
+
+            technicalTicketModel.Updates = await _context.TechnicalUpdates.Where(ticket => ticket.TicketId == id).ToListAsync();
+
+            return View(technicalTicketModel);
+        }
+
+
+
+        [ActionName("Action")]
+        public async Task<IActionResult> Update(int? id, string action)
+        {
+
+            var technicalTicketModel = await _context.TechnicalTicket
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (technicalTicketModel == null)
             {
                 return NotFound();
             }
 
-            return View(technicalTicketModel);
+
+
+            TechnicalUpdateModel update = new TechnicalUpdateModel();
+            update.TimeStamp = DateTime.Now;
+            update.UserName = User.Identity.Name;
+            update.IsResolved = false;
+            update.Action = action;
+            update.TicketId = technicalTicketModel.Id;
+            //change later
+            update.ProfilePicture = "/images/sampleprofile.png";
+
+
+
+
+
+            _context.Update(update);
+            await _context.SaveChangesAsync();
+
+            _context.Update(technicalTicketModel);
+
+            await _context.SaveChangesAsync();
+
+            technicalTicketModel.Updates.Add(update);
+
+            return RedirectToAction(nameof(Details), new { id = id });
+
+
         }
+
+
+
+
 
         // GET: TechnicalTicket/Create
         public async Task<IActionResult> Create()
