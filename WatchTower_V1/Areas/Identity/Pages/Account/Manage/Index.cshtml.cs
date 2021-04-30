@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -26,9 +24,9 @@ namespace WatchTower_V1.Areas.Identity.Pages.Account.Manage
         }
 
         public string Username { get; set; }
-
-        public string Firstname { get; set; }
-        public string Surname{ get; set; }
+        public string Fname {get;set;}
+        public string Sname { get; set; }
+        public string JobTitle { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -42,21 +40,15 @@ namespace WatchTower_V1.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
 
-            [Display(Name = "Profile Picture")]
-            public byte[] ProfilePicture { get; set; }
+
         }
 
         private async Task LoadAsync(UserModel user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-
+            
             Username = userName;
-            Firstname = user.Fname;
-            Surname = user.SName;
-            var profilePicture = user.ProfilePicture;
-
-
 
             Input = new InputModel
             {
@@ -99,17 +91,6 @@ namespace WatchTower_V1.Areas.Identity.Pages.Account.Manage
                     StatusMessage = "Unexpected error when trying to set phone number.";
                     return RedirectToPage();
                 }
-            }
-
-            if (Request.Form.Files.Count > 0)
-            {
-                IFormFile file = Request.Form.Files.FirstOrDefault();
-                using (var dataStream = new MemoryStream())
-                {
-                    await file.CopyToAsync(dataStream);
-                    user.ProfilePicture = dataStream.ToArray();
-                }
-                await _userManager.UpdateAsync(user);
             }
 
             await _signInManager.RefreshSignInAsync(user);

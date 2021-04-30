@@ -1,14 +1,32 @@
-﻿@model IEnumerable<WatchTower_V1.Models.TechnicalTicketModel>
+﻿@model IEnumerable<TechnicalTicketViewModel>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<form asp-controller="TechnicalTicket" asp-action="Index" method="get">
+    <p>
+        <label for="status">Filter by Ticket Status:</label>
+
+        <select name="status">
+            <option value="null">All Technical Tickets</option>
+            <option value="false">Only Open Tickets</option>
+            <option value="true">Only Closed Tickets</option>
+        </select>
+        Search Ticket: <input type="text" name="Search" />
+        <input class="btn btn-primary" type="submit" value="Filter" />
+    </p>
+</form>
+<form asp-controller="TechnicalTicket" asp-action="Index" method="get">
+    <p>
+        <input class="btn btn-outline-primary" type="submit" value="Reset" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -22,50 +40,70 @@
                 @Html.DisplayNameFor(model => model.DateOpened)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.CampusName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RoomNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AssetId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AssetName)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.isClosed)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.UserName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User)
+                @Html.DisplayNameFor(model => model.Stakeholder)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Asset)
-            </th>
+
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOpened)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.isClosed)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Asset.Description)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOpened)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CampusName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoomNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AssetId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AssetName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.isClosed)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Stakeholder)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

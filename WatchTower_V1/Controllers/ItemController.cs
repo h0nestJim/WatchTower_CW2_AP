@@ -19,11 +19,42 @@ namespace WatchTower_V1.Views
             _context = context;
         }
 
-        // GET: Item
-        public async Task<IActionResult> Index()
+
+        public async Task<IActionResult> Index(string search)
         {
-            return View(await _context.Item.ToListAsync());
+            var assets = (from a in _context.Item
+                          join ac in _context.AssetCategory on a.AssetCategoryId equals ac.Id
+                          join r in _context.Room on a.RoomId equals r.Id
+                          join c in _context.Campus on r.CampusId equals c.Id
+                          select new AssetViewModel()
+                          {
+                              Name = a.Name,
+                              Description = a.Description,
+                              AssetCategory = ac.Category,
+                              RoomNumber = r.RoomNumber,
+                              CampusName = c.Name
+                          });
+         
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                assets = assets.Where(a => a.Name.Contains(search));
+            }
+
+           
+
+                
+             
+            
+
+
+          
+            return View(await assets.ToListAsync());
+
+
         }
+
+
 
         // GET: Item/Details/5
         public async Task<IActionResult> Details(int? id)

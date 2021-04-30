@@ -32,16 +32,19 @@ namespace WatchTower_V1.Models
         [ForeignKey("UserId")]
         public string UserId { get; set; }
         public IEnumerable<UserModel> DBUsers { get; set; }
-
+        public string Stakeholder { get; set; }
 
         public int CampusId { get; set; }
+
+        public string CampusName { get; set; }
         public IEnumerable<CampusModel> Campus { get; set; }
 
         public int RoomId { get; set; }
-
+        public string RoomNumber { get; set; }
         public IEnumerable<RoomModel> Room { get; set; }
 
-        public string AssetId { get; set; }
+        public int AssetId { get; set; }
+        public string AssetName { get; set; }
         public IEnumerable<ItemModel> Asset { get; set; }
     }
 }

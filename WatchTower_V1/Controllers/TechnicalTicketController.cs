@@ -20,10 +20,46 @@ namespace WatchTower_V1.Views
         }
 
         // GET: TechnicalTicket
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string status, string search)
         {
-            var applicationDbContext = _context.TechnicalTicket.Include(t => t.Asset).Include(t => t.User);
-            return View(await applicationDbContext.ToListAsync());
+            var techTickets = (from t in _context.TechnicalTicket
+                                  join u in _context.Users on t.UserId equals u.Id
+                                  join a in _context.Item on t.AssetId equals a.Id
+                                  join r in _context.Room on a.RoomId equals r.Id
+                                  join c in _context.Campus on r.CampusId equals c.Id
+                                  select new TechnicalTicketViewModel()
+                                  {
+                                      Id = t.Id,
+                                      Title = t.Title,
+                                      Description = t.Description,
+                                      DateOpened = t.DateOpened,
+                                      UserName = t.UserName,
+                                      isClosed = t.isClosed,
+                                      UserId = t.UserId,
+                                      Stakeholder = u.UserName,
+                                      CampusName = c.Name,
+                                      RoomNumber = r.RoomNumber,
+                                      AssetId = t.AssetId,
+                                      AssetName = a.Name
+                                  });
+
+
+            //var generalTickets = from t in _context.GeneralTickets
+            // select t;
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                techTickets = techTickets.Where(t => t.Title.Contains(search));
+            }
+
+            if (status != "null")
+            {
+                if (!String.IsNullOrEmpty(status))
+                {
+                    techTickets = techTickets.Where(t => t.isClosed == Convert.ToBoolean(status));
+                }
+            }
+            return View(await techTickets.ToListAsync());
         }
 
         // GET: TechnicalTicket/Details/5
@@ -51,7 +87,7 @@ namespace WatchTower_V1.Views
 
 
         [ActionName("Action")]
-        public async Task<IActionResult> Update(int? id, string action)
+        public async Task<IActionResult> Update(int? id, string action, bool isresolved)
         {
 
             var technicalTicketModel = await _context.TechnicalTicket
@@ -66,13 +102,16 @@ namespace WatchTower_V1.Views
             TechnicalUpdateModel update = new TechnicalUpdateModel();
             update.TimeStamp = DateTime.Now;
             update.UserName = User.Identity.Name;
-            update.IsResolved = false;
+            update.IsResolved = isresolved;
             update.Action = action;
             update.TicketId = technicalTicketModel.Id;
             //change later
             update.ProfilePicture = "/images/sampleprofile.png";
 
-
+            if (isresolved)
+            {
+                technicalTicketModel.isClosed = true;
+            }
 
 
 

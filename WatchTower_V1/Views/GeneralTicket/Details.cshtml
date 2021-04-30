@@ -104,8 +104,12 @@
 <div class="row">
     <div class="col-md-6">
         <form method="post" asp-action="Action">
-            <input name="id" value="@Model.Id" type="hidden" readonly/>
+            <input name="id" value="@Model.Id" type="hidden" readonly />
             <input type="text" class="w-100" placeholder="Update action details..." name="action" />
+            <select name="isresolved">
+                <option value="false">Issue is Ongoing</option>
+                <option value="true">Mark as Resolved</option>
+            </select>
             <button type="submit" class="btn btn-block btn-primary mt-2">Submit Update</button>
         </form>
     </div>

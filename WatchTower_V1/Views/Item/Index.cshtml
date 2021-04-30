@@ -1,11 +1,24 @@
-﻿@model IEnumerable<WatchTower_V1.Models.ItemModel>
+﻿@model IEnumerable<AssetViewModel>
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
+<form asp-controller="Item" asp-action="Index" method="get">
+    <p>
+        <label for="status">Search Assets:</label>
 
+
+        Search Ticket: <input type="text" name="search" />
+        <input class="btn btn-primary" type="submit" value="Search" />
+    </p>
+</form>
+<form asp-controller="Item" asp-action="Index" method="get">
+    <p>
+        <input class="btn btn-outline-primary" type="submit" value="Reset" />
+    </p>
+</form>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -19,16 +32,20 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AssetCategoryId)
+                @Html.DisplayNameFor(model => model.AssetCategory)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RoomId)
+                @Html.DisplayNameFor(model => model.RoomNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CampusName)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -37,10 +54,13 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                 @Html.DisplayFor(modelItem => item.AssetCategoryId)
+                @Html.DisplayFor(modelItem => item.AssetCategory)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RoomId)
+                @Html.DisplayFor(modelItem => item.RoomNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CampusName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -48,6 +68,6 @@
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>

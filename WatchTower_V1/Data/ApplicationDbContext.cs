@@ -26,5 +26,7 @@ namespace WatchTower_V1.Data
             : base(options)
         {
         }
+
+        public DbSet<WatchTower_V1.Models.UserViewModel> UserViewModel { get; set; }
     }
 }

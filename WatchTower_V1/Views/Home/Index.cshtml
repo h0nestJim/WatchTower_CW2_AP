@@ -1,8 +1,101 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h2 class="display-4 py-4">UCS WatchTower - Control Centre</h2>
+    <h4 class="display-4 py-2">Hi, @Model.CurrentUser.Fname!</h4>
+
+    <div class="row mb-3">
+        <div class="col">
+            <a href="@Url.Action("Create", "GeneralTicket")">
+                <div class="btn btn-block btn-info">Create General Ticket</div>
+            </a>
+        </div>
+        <div class="col">
+            <a href="@Url.Action("Index", "GeneralTicket")">
+                <div class="btn btn-block btn-outline-info">View All General Tickets</div>
+            </a>
+        </div>
+        <div class="col">
+            <a href="@Url.Action("Create", "TechnicalTicket")">
+                <div class="btn btn-block btn-warning">Create Technical Ticket</div>
+            </a>
+        </div>
+        <div class="col">
+            <a href="@Url.Action("Index", "TechnicalTicket")">
+                <div class="btn btn-block btn-outline-warning">View All Technical Tickets</div>
+            </a>
+        </div>
+    </div>
+
+
+
+
+    <div class="alert alert-info" role="alert">
+        <p class="font-weight-bold">Tickets Currently Assigned To You: <b> @Model.MyTicketCount</b></p>
+        <hr />
+        <p class="font-weight-light">The current stack of all active tickets is currently at: <b>@Model.CombinedTickets</b></p>
+    </div>
+
+
+
+    <h4 class="py-2">Your Active General Tickets</h4>
+    <div class="row">
+        @foreach (var ticket in Model.MyGenTickets)
+        {
+
+            <section class="col-lg-3 col-md-6 py-3">
+                <div class="card">
+                    <img src="/images/sampleGen.png" class="img-fluid card-img-top" />
+                    <div class="card-body">
+                        <h4 class="card-title">@ticket.Title</h4>
+                        <small class="text-muted">@ticket.Description</small>
+                        <hr>
+                        <p>
+                            <b>Date Opened:</b>
+                            @ticket.DateOpened
+                        </p>
+                        <a href="@Url.Action("Details", "GeneralTicket", new { id = ticket.Id })">
+                            <div class="btn btn-block btn-primary">Review</div>
+                        </a>
+
+
+                    </div>
+                </div>
+            </section>
+
+        }
+    </div>
+
+
+    <h4 class="py-2">Your Active technical Tickets</h4>
+    <div class="row">
+        @foreach (var ticket in Model.MyTechTickets)
+        {
+
+            <section class="col-lg-3 col-md-6 py-3">
+                <div class="card">
+                    <img src="/images/sampleTech.png" class="img-fluid card-img-top" />
+                    <div class="card-body">
+                        <h4 class="card-title">@ticket.Title</h4>
+                        <small class="text-muted">@ticket.Description</small>
+                        <hr>
+                        <p>
+                            <b>Date Opened:</b>
+                            @ticket.DateOpened
+                        </p>
+                        <a href="@Url.Action("Details", "TechnicalTicket", new { id = ticket.Id })">
+                            <div class="btn btn-block btn-primary">Review</div>
+                        </a>
+
+
+                    </div>
+                </div>
+            </section>
+
+        }
+    </div>
 </div>
+

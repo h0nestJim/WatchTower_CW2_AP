@@ -18,7 +18,7 @@ using WatchTower_V1.Models;
 
 namespace WatchTower_V1.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
+    [Authorize]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<UserModel> _signInManager;
@@ -65,6 +65,11 @@ namespace WatchTower_V1.Areas.Identity.Pages.Account
             public string UserName { get; set; }
 
             [Required]
+            [Display(Name = "Job Title")]
+            public string JobTitle { get; set; }
+
+
+            [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
@@ -72,28 +77,30 @@ namespace WatchTower_V1.Areas.Identity.Pages.Account
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Provide User's Default Password")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
+            [Display(Name = "Confirm User's Default Password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
         }
 
+        
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
+        
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new UserModel { UserName = Input.UserName, Email = Input.Email, Fname = Input.Fname, SName=Input.SName };
+                var user = new UserModel { UserName = Input.UserName, Email = Input.Email, Fname = Input.Fname, SName=Input.SName, JobTitle = Input.JobTitle };
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 //ADD Custom Roles
@@ -122,6 +129,11 @@ namespace WatchTower_V1.Areas.Identity.Pages.Account
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
+                    TempData["Message"] = $"New user {user.UserName} created successfully!";
+
+
+                    return LocalRedirect("/Account");
+                    /*
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
                         return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
@@ -131,6 +143,7 @@ namespace WatchTower_V1.Areas.Identity.Pages.Account
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
+                    */
                 }
                 foreach (var error in result.Errors)
                 {

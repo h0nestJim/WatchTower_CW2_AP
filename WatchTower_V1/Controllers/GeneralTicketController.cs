@@ -22,10 +22,44 @@ namespace WatchTower_V1.Views
         }
 
         // GET: GeneralTicket
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string status, string search)
         {
-            return View(await _context.GeneralTickets.ToListAsync());
+            var generalTickets = (from t in _context.GeneralTickets
+                              join u in _context.Users on t.UserId equals u.Id
+                              select new GeneralTicketViewModel()
+                              {
+                                  Id = t.Id,
+                                  Title = t.Title,
+                                  Description = t.Description,
+                                  DateOpened = t.DateOpened,
+                                  UserName = t.UserName,
+                                  isClosed = t.isClosed,
+                                  UserId = t.UserId,
+                                  Stakeholder = u.UserName
+                              });
+
+
+            //var generalTickets = from t in _context.GeneralTickets
+                        // select t;
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                generalTickets = generalTickets.Where(t => t.Title.Contains(search));
+            }
+
+            if (status != "null")
+            {
+                if (!String.IsNullOrEmpty(status))
+                {
+                    generalTickets = generalTickets.Where(t => t.isClosed == Convert.ToBoolean(status));
+                }
+            }
+            return View(await generalTickets.ToListAsync());
+
+
         }
+
+
 
         // GET: GeneralTicket/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -52,7 +86,7 @@ namespace WatchTower_V1.Views
     
 
         [ActionName("Action")]
-        public async Task<IActionResult> Update(int? id, string action)
+        public async Task<IActionResult> Update(int? id, string action, bool isresolved)
         {
            
             var generalTicketModel = await _context.GeneralTickets
@@ -62,18 +96,21 @@ namespace WatchTower_V1.Views
                 return NotFound();
             }
 
-           
+            var x = isresolved;
 
             GeneralUpdateModel update = new GeneralUpdateModel();
             update.TimeStamp = DateTime.Now;
             update.UserName = User.Identity.Name;
-            update.IsResolved = false;
+            update.IsResolved = isresolved;
             update.Action = action;
             update.TicketId = generalTicketModel.Id;
             //change later
             update.ProfilePicture = "/images/sampleprofile.png";
 
-           
+           if (isresolved)
+            {
+                generalTicketModel.isClosed = true;
+            }
 
            
 

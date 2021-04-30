@@ -34,6 +34,7 @@ namespace WatchTower_V1.Models
         public IEnumerable<UserModel> DBUsers{ get; set; }
 
     
+        public string Stakeholder { get; set; }
 
      
     }

@@ -25,24 +25,7 @@ namespace WatchTower_V1.Views
             return View(await _context.Campus.ToListAsync());
         }
 
-        // GET: CampusModels/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var campusModel = await _context.Campus
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (campusModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(campusModel);
-        }
-
+      
         // GET: CampusModels/Create
         public IActionResult Create()
         {
