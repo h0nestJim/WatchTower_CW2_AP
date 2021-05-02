@@ -34,6 +34,18 @@ a{
     color:dodgerblue;
 }
 
+#bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    /* Preserve aspet ratio */
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.login-white{
+    color:#f2f2f2;
+}
 
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -45,12 +57,43 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
-    /*background-image: url(../images/branding/wt_bg.png);*/
+    
 }
+
+
+
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
+}
+
+
+.open{
+    text-align:center;
+    padding:3%;
+    color:#ff3b21;
+    font-weight:bold;
+}
+
+.resolved {
+    text-align: center;
+    padding: 3%;
+    color: #00ad4b;
+    font-weight: bold;
+}
+.open-details {
+   
+    
+    color: #ff3b21;
+    font-weight: bold;
+}
+
+.resolved-details {
+    
+   
+    color: #00ad4b;
+    font-weight: bold;
 }

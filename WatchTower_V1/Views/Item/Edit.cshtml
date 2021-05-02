@@ -1,12 +1,12 @@
-﻿@model WatchTower_V1.Models.ItemModel
+﻿@model AssetViewModel
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Spotlight</h1>
 
-<h4>ItemModel</h4>
+<h4>Edit Asset</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -23,16 +23,39 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="AssetCategoryId" class="control-label"></label>
-                <input asp-for="AssetCategoryId" class="form-control" />
+                <label asp-for="AssetCategoryId" class="control-label">Reassign Asset Category</label>
+                <select asp-for="AssetCategoryId" class="form-control">
+                    @{
+                        foreach (var item in Model.Assetcategory)
+                        {
+                            <option value="@item.Id">
+                                @item.Category
+                            </option>
+                        }
+                    }
+                </select>
                 <span asp-validation-for="AssetCategoryId" class="text-danger"></span>
             </div>
+
+
             <div class="form-group">
-                <label asp-for="AssetCategory" class="control-label"></label>
-                <input asp-for="AssetCategory" class="form-control" />
-                <span asp-validation-for="AssetCategory" class="text-danger"></span>
+                <label asp-for="RoomId" class="control-label">Reassign To New Room</label>
+                <select asp-for="RoomId" class="form-control">
+                    @{
+                        foreach (var item in Model.Room)
+                        {
+                            <option value="@item.Id">
+                                @item.RoomNumber
+                            </option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="RoomId" class="text-danger"></span>
             </div>
+
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

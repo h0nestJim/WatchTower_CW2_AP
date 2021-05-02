@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,6 +10,7 @@ using WatchTower_V1.Models;
 
 namespace WatchTower_V1.Controllers
 {
+    [Authorize]
     public class UserRolesController : Controller
     {
         private readonly UserManager<UserModel> _userManager;
@@ -18,6 +20,7 @@ namespace WatchTower_V1.Controllers
             _roleManager = roleManager;
             _userManager = userManager;
         }
+        [Authorize(Roles = "Manager,Admin")]
         public async Task<IActionResult> Index()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -34,6 +37,7 @@ namespace WatchTower_V1.Controllers
             }
             return View(userRolesViewModel);
         }
+        [Authorize(Roles = "Manager,Admin")]
         private async Task<List<string>> GetUserRoles(UserModel user)
         {
             return new List<string>(await _userManager.GetRolesAsync(user));
@@ -42,7 +46,7 @@ namespace WatchTower_V1.Controllers
 
 
 
-
+        [Authorize(Roles = "Manager,Admin")]
         public async Task<IActionResult> Manage(string userId)
         {
             ViewBag.userId = userId;
@@ -77,7 +81,7 @@ namespace WatchTower_V1.Controllers
 
 
 
-
+        [Authorize(Roles = "Manager,Admin")]
         [HttpPost]
         public async Task<IActionResult> Manage(List<ManageUserRolesViewModel> model, string userId)
         {

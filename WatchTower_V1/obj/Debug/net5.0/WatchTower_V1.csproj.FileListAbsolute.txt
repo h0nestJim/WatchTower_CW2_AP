@@ -433,10 +433,10 @@ C:\Users\jshau\OneDrive\Desktop\WatchTower_V1\WatchTower_V1\obj\Debug\net5.0\Raz
 C:\Users\jshau\OneDrive\Desktop\WatchTower_V1\WatchTower_V1\obj\Debug\net5.0\Razor\Views\TechnicalTicket\Details.cshtml.g.cs
 C:\Users\jshau\OneDrive\Desktop\WatchTower_V1\WatchTower_V1\obj\Debug\net5.0\Razor\Views\TechnicalTicket\Edit.cshtml.g.cs
 C:\Users\jshau\OneDrive\Desktop\WatchTower_V1\WatchTower_V1\obj\Debug\net5.0\Razor\Views\TechnicalTicket\Index.cshtml.g.cs
-C:\Users\jshau\OneDrive\Desktop\WatchTower_V1\WatchTower_V1\obj\Debug\net5.0\Razor\Views\Shared\RoomPartial.cshtml.g.cs
 C:\Users\jshau\OneDrive\Desktop\WatchTower_V1\WatchTower_V1\obj\Debug\net5.0\Razor\Views\GeneralTicket\AddUpdate.cshtml.g.cs
 C:\Users\jshau\OneDrive\Desktop\WatchTower_V1\WatchTower_V1\obj\Debug\net5.0\Razor\Views\Account\Index.cshtml.g.cs
 C:\Users\jshau\OneDrive\Desktop\WatchTower_V1\WatchTower_V1\obj\Debug\net5.0\Razor\Areas\Identity\Pages\Account\AccessDenied.cshtml.g.cs
 C:\Users\jshau\OneDrive\Desktop\WatchTower_V1\WatchTower_V1\obj\Debug\net5.0\Razor\Areas\Identity\Pages\Account\Manage\ChangePassword.cshtml.g.cs
 C:\Users\jshau\OneDrive\Desktop\WatchTower_V1\WatchTower_V1\obj\Debug\net5.0\Razor\Areas\Identity\Pages\Account\Manage\PersonalData.cshtml.g.cs
 C:\Users\jshau\OneDrive\Desktop\WatchTower_V1\WatchTower_V1\obj\Debug\net5.0\Razor\Views\Account\Delete.cshtml.g.cs
+C:\Users\jshau\OneDrive\Desktop\WatchTower_V1\WatchTower_V1\obj\Debug\net5.0\Razor\Areas\Identity\Pages\Account\ResetPassword.cshtml.g.cs

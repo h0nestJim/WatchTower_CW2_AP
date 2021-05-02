@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,6 +13,7 @@ using WatchTower_V1.Models;
 
 namespace WatchTower_V1.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -24,7 +27,32 @@ namespace WatchTower_V1.Controllers
             _roleManager = roleManager;
         }
         // GET: AccountController
-        public async Task<IActionResult> Index()
+
+        [Authorize(Roles = "Manager,Admin")]
+        public async Task<IActionResult> ResetPassword(string id)
+        {
+            var user = _context.Users.Find(id);
+            
+            if (user == null)
+            {
+                return NotFound();
+            }
+            
+            string newPassword = "Pass!23"; //"<PasswordAsTypedByUser>";
+            string hashedNewPassword = _userManager.PasswordHasher.HashPassword(user, newPassword);
+
+            user.PasswordHash = hashedNewPassword;
+
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+            TempData["Message"] = $"{user.UserName}'s password has been reset to default: {newPassword}";
+            TempData["MessageValue"] = "1";
+
+            return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = "Manager,Admin")]
+        public async Task<IActionResult> Index(string search)
         {
             var users = await _userManager.Users.ToListAsync();
             var usersViewModel = new List<UserViewModel>();
@@ -37,14 +65,24 @@ namespace WatchTower_V1.Controllers
                 accountUserModel.UserName = user.UserName;
                 accountUserModel.JobTitle = user.JobTitle;
                 accountUserModel.Email = user.Email;
-               
-                usersViewModel.Add(accountUserModel);
+
+                //exclude Admin user from usermanager view
+                if (accountUserModel.UserName != "AdminWT")
+                {
+                    usersViewModel.Add(accountUserModel);
+                }
             }
 
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                return View(usersViewModel.Where(u => u.UserName.Contains(search)));
+            }
             return View(usersViewModel);
 
         }
 
+        [Authorize(Roles = "Manager,Admin")]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -69,6 +107,7 @@ namespace WatchTower_V1.Controllers
             return View(userViewModel);
         }
 
+        [Authorize(Roles = "Manager,Admin")]
         // POST: /Delete/ffgty767gggt76
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

@@ -1,38 +1,40 @@
-﻿@model WatchTower_V1.Models.ItemModel
+﻿@model AssetViewModel
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Spotlight</h1>
+
+<h4>Asset Details</h4>
 
 <div>
-    <h4>ItemModel</h4>
+    
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AssetCategoryId)
+        <dt class="col-sm-2">
+           Asset Category 
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AssetCategoryId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AssetCategory)
-        </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.AssetCategory)
+        </dd>
+        <dt class="col-sm-2">
+            Assigned To: 
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RoomNumber)
         </dd>
     </dl>
 </div>

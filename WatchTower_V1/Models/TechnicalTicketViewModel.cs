@@ -46,5 +46,13 @@ namespace WatchTower_V1.Models
         public int AssetId { get; set; }
         public string AssetName { get; set; }
         public IEnumerable<ItemModel> Asset { get; set; }
+
+        public List<TechnicalUpdateModel> Updates;
+
+        public TechnicalTicketViewModel()
+        {
+            Updates = new List<TechnicalUpdateModel>();
+
+        }
     }
 }

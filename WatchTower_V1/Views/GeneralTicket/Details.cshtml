@@ -3,46 +3,56 @@
 @{
     ViewData["Title"] = "Details";
 }
+<div>
+    <a asp-action="" asp-route-id="Index"><div class="btn btn-warning mb-2 ml-2">Back To List</div></a>
 
-<h1>Details</h1>
-
+</div>
+<h1>Spotlight</h1>
+<h2>Update Ticket</h2>
 <div>
    
-    <h4>GeneralTicketModel</h4>
+   
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
+            Ticket Tile:
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
+            <b>@Html.DisplayFor(model => model.Title)</b> 
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
+           Description:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateOpened)
+            Issue Raised:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.DateOpened)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.isClosed)
+            Status:
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.isClosed)
+        <dd class="col-sm-10">
+            @if (Model.isClosed)
+            {
+                <p class="resolved-details">Resolved!</p>
+            }
+            else
+            {
+                <p class="open-details">Open!</p>
+            }
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserName)
+            Ticket Author:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.UserName)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserId)
+            Raised By:
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.UserId)
@@ -51,12 +61,12 @@
 </div>
 
 
-<div class="row">
-    <div class="col-md-6">
+<div class="row justify-content-center">
+    <div class="col-md-10 ">
         @{
             if (Model.Updates.Count > 0)
             {
-                <table class="table table-striped table-light table-responsive-md">
+                <table class="table table-bordered table-striped table-light table-responsive-md">
                     <thead>
                         <tr>
                             <th scope="col"></th>
@@ -101,12 +111,14 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-6">
+<div class="row justify-content-center py-3 alert alert-secondary">
+    <div class="col-md-10">
+        <h3 class="py-2 text-center">Record Update</h3>
         <form method="post" asp-action="Action">
             <input name="id" value="@Model.Id" type="hidden" readonly />
-            <input type="text" class="w-100" placeholder="Update action details..." name="action" />
-            <select name="isresolved">
+            <textarea type="text" class="form-control py-3" placeholder="Update action details..." name="action" rows="3"> </textarea>
+            <label class="py-2" for="isresolved">Update Status/Resolve Ticket?</label>
+            <select id="isresolved" name="isresolved">
                 <option value="false">Issue is Ongoing</option>
                 <option value="true">Mark as Resolved</option>
             </select>
@@ -118,7 +130,4 @@
 
 
 
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+

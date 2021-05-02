@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using WatchTower_V1.Models;
 
 namespace WatchTower_V1.Views
 {
+    [Authorize]
     public class RoomController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,14 +24,35 @@ namespace WatchTower_V1.Views
         }
 
         // GET: Room
-        public async Task<IActionResult> Index()
+        [Authorize(Roles = "Support,Manager,Admin")]
+        public async Task<IActionResult> Index(string type, string search)
         {
-            
-  
-            return View(await _context.Room.ToListAsync());
+            var data = _context.Room.Include("Campus");
+            var filter = Convert.ToBoolean(type);
+            if (filter)
+            {
+                if (!String.IsNullOrEmpty(search))
+                {
+
+                    data = _context.Room.Include("Campus").Where(t => t.Campus.Name.ToLower() == search.ToLower());
+                }
+            }
+            else
+            {
+                if (!String.IsNullOrEmpty(search))
+                {
+                    data = _context.Room.Include("Campus").Where(t => t.RoomNumber.Contains(search));
+                }
+            }
+
+
+           
+
+            return View(await data.ToListAsync());
         }
 
         // GET: Room/Details/5
+        [Authorize(Roles = "Support,Manager,Admin")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -48,6 +71,7 @@ namespace WatchTower_V1.Views
         }
 
         // GET: Room/Create
+        [Authorize(Roles = "Manager,Admin")]
         public async Task<IActionResult> Create()
         {
 
@@ -77,7 +101,7 @@ namespace WatchTower_V1.Views
         // POST: Room/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        
+        [Authorize(Roles = "Manager,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,RoomNumber,Description,CampusId")] RoomModel roomModel)
@@ -91,11 +115,12 @@ namespace WatchTower_V1.Views
             }
             return View(roomModel);
         }
-        
 
-        
+
+
 
         // GET: Room/Edit/5
+        [Authorize(Roles = "Support,Manager,Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -114,6 +139,7 @@ namespace WatchTower_V1.Views
         // POST: Room/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Support,Manager,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("id,RoomNumber,Description")] RoomModel roomModel)
@@ -147,6 +173,7 @@ namespace WatchTower_V1.Views
         }
 
         // GET: Room/Delete/5
+        [Authorize(Roles = "Manager,Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -165,6 +192,7 @@ namespace WatchTower_V1.Views
         }
 
         // POST: Room/Delete/5
+        [Authorize(Roles = "Manager,Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -174,6 +202,7 @@ namespace WatchTower_V1.Views
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool RoomModelExists(int id)
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using WatchTower_V1.Models;
 
 namespace WatchTower_V1.Views
 {
+    [Authorize]
     public class TechnicalTicketController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -81,7 +83,37 @@ namespace WatchTower_V1.Views
 
             technicalTicketModel.Updates = await _context.TechnicalUpdates.Where(ticket => ticket.TicketId == id).ToListAsync();
 
-            return View(technicalTicketModel);
+
+            var technicalTicketViewModel = new TechnicalTicketViewModel();
+
+            technicalTicketViewModel.Id = technicalTicketModel.Id;
+            technicalTicketViewModel.Title = technicalTicketModel.Title;
+            technicalTicketViewModel.Description = technicalTicketModel.Description;
+            technicalTicketViewModel.DateOpened = technicalTicketModel.DateOpened;
+            technicalTicketViewModel.UserName = technicalTicketModel.UserName;
+            technicalTicketViewModel.isClosed = technicalTicketModel.isClosed;
+
+            var user =  _context.Users.Find(technicalTicketModel.UserId);
+            technicalTicketViewModel.Stakeholder = user.UserName;
+
+            var asset = _context.Item.Find(technicalTicketModel.AssetId);
+            technicalTicketViewModel.AssetName = asset.Name;
+
+            var room = _context.Room.Find(asset.RoomId);
+            technicalTicketViewModel.RoomNumber = room.RoomNumber;
+            technicalTicketViewModel.RoomId = room.Id;
+
+            var campus = _context.Campus.Find(room.CampusId);
+            technicalTicketViewModel.CampusId = campus.Id;
+            technicalTicketViewModel.CampusName = campus.Name;
+
+            foreach(var update in technicalTicketModel.Updates)
+            {
+                technicalTicketViewModel.Updates.Add(update);
+            }
+
+
+            return View(technicalTicketViewModel);
         }
 
 

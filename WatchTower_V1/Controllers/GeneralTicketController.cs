@@ -12,6 +12,7 @@ using WatchTower_V1.Models;
 
 namespace WatchTower_V1.Views
 {
+    [Authorize]
     public class GeneralTicketController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -77,6 +78,12 @@ namespace WatchTower_V1.Views
             {
                 return NotFound();
             }
+
+            var user =  _context.Users.Find(generalTicketModel.UserId);
+
+            generalTicketModel.UserId = user.UserName;
+
+
 
             generalTicketModel.Updates = await _context.GeneralUpdates.Where(ticket => ticket.TicketId == id).ToListAsync();
 
@@ -187,12 +194,26 @@ namespace WatchTower_V1.Views
                 return NotFound();
             }
 
+            var generalTicketViewModel = new GeneralTicketViewModel();
+
+            var model = await _context.GeneralTickets.FindAsync(id);
+            var user = await _context.Users.FindAsync(model.UserId);
+
+            generalTicketViewModel.Id = model.Id;
+            generalTicketViewModel.isClosed = model.isClosed;
+            generalTicketViewModel.Stakeholder = user.UserName;
+            generalTicketViewModel.Title = model.Title;
+            generalTicketViewModel.UserId = model.UserId;
+            generalTicketViewModel.DateOpened = model.DateOpened;
+            generalTicketViewModel.Description = model.Description;
+            generalTicketViewModel.UserName = model.UserName;
+
+            generalTicketViewModel.DBUsers = await _context.Users.ToListAsync();
+           
+
             var generalTicketModel = await _context.GeneralTickets.FindAsync(id);
-            if (generalTicketModel == null)
-            {
-                return NotFound();
-            }
-            return View(generalTicketModel);
+           
+            return View(generalTicketViewModel);
         }
 
         // POST: GeneralTicket/Edit/5

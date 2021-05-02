@@ -1,10 +1,11 @@
 ﻿@model IEnumerable<GeneralTicketViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Searchlight - General Tickets";
 }
 
-<h1>Index</h1>
+<h1>Searchlight</h1>
+<h2>All General Tickets</h2>
 
 <form asp-controller="GeneralTicket" asp-action="Index" method="get">
     <p>
@@ -24,62 +25,67 @@
         <input class="btn btn-outline-primary" type="submit" value="Reset" />
     </p>
 </form>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateOpened)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.isClosed)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Stakeholder)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateOpened)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.isClosed)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Stakeholder)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+<div class="row">
 
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <a asp-action="Create">
+        <div class="btn btn-primary p-2 m-3">Raise New General Ticket</div>
+    </a>
+</div>
+
+
+<div class="row">
+    @foreach (var ticket in Model)
+    {
+
+        <section class="col-lg-3 col-md-6 py-3">
+            <div class="card">
+                <img src="/images/sampleTech.png" class="img-fluid card-img-top" />
+                <div class="card-body">
+                    <h4 class="card-title">@ticket.Title</h4>
+                    @if (ticket.isClosed)
+                    {
+                        <p class="resolved">Resolved!</p>
+                    }
+                    else
+                    {
+                        <p class="open">Open!</p>
+                    }
+                    <small class="text-muted">@ticket.Description</small>
+                    <hr>
+                    <p>
+                        <b>Date Opened:</b>
+                        @ticket.DateOpened
+                    </p>
+
+                    @if (ticket.isClosed)
+                    {
+                        <a asp-action="Details" asp-route-id="@ticket.Id">
+                            <div class="btn btn-block btn-success mb-2">Review</div>
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@ticket.Id">
+                            <div class="btn btn-block btn-warning mb-2">Edit/Reopen</div>
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="Details" asp-route-id="@ticket.Id">
+                            <div class="btn btn-block btn-success mb-2">Update or Resolve</div>
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@ticket.Id">
+                            <div class="btn btn-block btn-warning mb-2">Edit Ticket</div>
+                        </a>
+                    }
+
+
+
+
+                </div>
+            </div>
+        </section>
+
+    }
+</div>
+
+
+
+

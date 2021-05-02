@@ -29,7 +29,7 @@ namespace WatchTower_V1.Controllers
             _logger = logger;
         }
 
-
+        [Authorize(Roles="Support,Manager,Admin")]
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -86,11 +86,7 @@ namespace WatchTower_V1.Controllers
             return View(dashboardModel);
         }
 
-        [Authorize(Roles="StaffStudent")]
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        
 
 
 

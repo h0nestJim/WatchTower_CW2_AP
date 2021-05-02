@@ -4,42 +4,44 @@
     ViewData["Title"] = "Campus";
 }
 
-<h1>SearchLight - View All Campus'</h1>
-<div class="row">
 
-    <a asp-action="Create">
-        <div class="btn btn-primary p-2 m-3">Create New Campus</div>
-    </a>
+    <h1>SearchLight</h1>
+    <h2>View All Campuses</h2>
+    <div class="row">
 
-</div>
+        <a asp-action="Create">
+            <div class="btn btn-primary p-2 m-3">Create New Campus</div>
+        </a>
 
-<h4 class="py-2">Your Active General Tickets</h4>
-<div class="row">
-    @foreach (var campus in Model)
-    {
+    </div>
 
-        <section class="col-lg-3 col-md-6 py-3">
-            <div class="card">
-                <img src="/images/sampleCampus.png" class="img-fluid card-img-top" />
-                <div class="card-body">
-                    <h4 class="card-title">@campus.Name</h4>
+  
+    <div class="row">
+        @foreach (var campus in Model)
+        {
 
-                    <a href="@Url.Action("Edit", "Campus", new { id = campus.Id })">
-                        <div class="btn btn-block btn-primary mb-2">Edit Name</div>
-                    </a>
-                    <a href="@Url.Action("Delete", "Campus", new { id = campus.Id })">
-                        <div class="btn btn-block btn-outline-danger mb-2">Delete</div>
-                    </a>
+            <section class="col-lg-3 col-md-6 py-3">
+                <div class="card">
+                    <img src="/images/sampleCampus.png" class="img-fluid card-img-top" />
+                    <div class="card-body">
+                        <h4 class="card-title">@campus.Name</h4>
 
-
-
-
+                        <a href="@Url.Action("Edit", "Campus", new { id = campus.Id })">
+                            <div class="btn btn-block btn-primary mb-2">Edit Name</div>
+                        </a>
+                        <a href="@Url.Action("Delete", "Campus", new { id = campus.Id })">
+                            <div class="btn btn-block btn-outline-danger mb-2">Delete</div>
+                        </a>
 
 
+
+
+
+
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-    }
-</div>
+        }
+    </div>
 

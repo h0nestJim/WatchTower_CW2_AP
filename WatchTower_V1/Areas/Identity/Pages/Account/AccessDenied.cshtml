@@ -1,10 +1,26 @@
 ﻿@page
 @model AccessDeniedModel
 @{
-    ViewData["Title"] = "Access denied";
+    ViewData["Title"] = "Access Denied";
 }
+<div class="container">
+    <div class="row">
+        <div class="col col-10 justify-content-center">
+            <h4 class="display-4 py-3">WatchTower - Restricted Access</h4>
+            <h4>Access for your account type is denied!</h4>
 
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">You do not have access to this resource.</p>
-</header>
+        </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+        <div class="col-12">
+        <div class="alert alert-danger text-center mt-3" role="alert">
+
+            <p class="font-weight-bold"> You do not have permission to access this route!</p>
+            <hr />
+            <p class="font-weight-bold">If you think this is an error, please contact your Administrator.</p>
+
+        </div>
+            </div>
+    </div>
+</div>

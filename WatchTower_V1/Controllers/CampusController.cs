@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using WatchTower_V1.Models;
 
 namespace WatchTower_V1.Views
 {
+    [Authorize]
     public class CampusController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,12 +22,13 @@ namespace WatchTower_V1.Views
         }
 
         // GET: CampusModels
+        [Authorize(Roles = "Support,Manager,Admin")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Campus.ToListAsync());
         }
 
-      
+        [Authorize(Roles = "Manager,Admin")]
         // GET: CampusModels/Create
         public IActionResult Create()
         {
@@ -35,6 +38,7 @@ namespace WatchTower_V1.Views
         // POST: CampusModels/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Manager,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] CampusModel campusModel)
@@ -49,6 +53,7 @@ namespace WatchTower_V1.Views
         }
 
         // GET: CampusModels/Edit/5
+        [Authorize(Roles = "Support,Manager,Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -67,6 +72,7 @@ namespace WatchTower_V1.Views
         // POST: CampusModels/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Support,Manager,Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] CampusModel campusModel)
@@ -100,6 +106,7 @@ namespace WatchTower_V1.Views
         }
 
         // GET: CampusModels/Delete/5
+        [Authorize(Roles = "Manager,Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -117,6 +124,7 @@ namespace WatchTower_V1.Views
             return View(campusModel);
         }
 
+        [Authorize(Roles = "Manager,Admin")]
         // POST: CampusModels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
